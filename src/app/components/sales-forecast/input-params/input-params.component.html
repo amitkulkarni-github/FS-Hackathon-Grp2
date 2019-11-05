@@ -1,0 +1,88 @@
+<div>
+    <div class="card border-primary">
+        <div class="card-header">Inputs
+        </div>
+        <div class="card-body">
+            <div class="row">
+                <div class="col">
+                    <p><b>History</b></p>
+                    <hr />
+                    <div>
+                        <table>
+                            <tr>
+                                <td>
+                                    <label class="col-form-label">Start Date</label>
+                                </td>
+                                <td>
+                                    <input matInput [matDatepicker]="historyStartDate" placeholder="Choose a date">
+                                    <mat-datepicker-toggle matSuffix [for]="historyStartDate"></mat-datepicker-toggle>
+                                    <mat-datepicker #historyStartDate></mat-datepicker>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>
+                                    <label class="col-form-label">No. of weeks</label>
+                                </td>
+                                <td>
+                                    <input type="number">
+                                </td>
+                            </tr>
+                        </table>
+                    </div>
+
+                </div>
+
+            </div>
+            <hr />
+            <div class="row">
+                <div class="col">
+                    <p><b>Forecast</b></p>
+                    <hr />
+                    <table>
+                        <tr>
+                            <td>
+                                <label class="col-form-label">Start Date</label>
+                            </td>
+                            <td>
+                                <input matInput [matDatepicker]="forecastStartDate" placeholder="Choose a date">
+                                <mat-datepicker-toggle matSuffix [for]="forecastStartDate"></mat-datepicker-toggle>
+                                <mat-datepicker #forecastStartDate></mat-datepicker>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>
+                                <label class="col-form-label">No. of weeks</label>
+                            </td>
+                            <td>
+                                <input type="number">
+                            </td>
+                        </tr>
+                    </table>
+                </div>
+
+            </div>
+            <hr />
+            <div class="row">
+                <div class="col">
+                    <p><b>Channel</b></p>
+                    <hr />
+                    <div>
+                        <select class="form-control" id="channelSelect">
+                            <option>Direct Store Order</option>
+                            <option>Direct Online Sale</option>
+                            <option>Phone Order</option>
+                        </select>
+                    </div>
+
+                </div>
+
+            </div>
+            <hr />
+            <div class="row">
+                <div class="col">
+                    <button type="button" class="btn btn-primary btn-lg btn-block">Forecast</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
