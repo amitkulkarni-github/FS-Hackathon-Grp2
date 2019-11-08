@@ -1,0 +1,3 @@
+[{"id":"1", "name":"Direct Store Order", "descritption":"Orders placed in-store"},
+    {"id":"2", "name":"Direct Online Sales", "descritption":"Orders placed on the website or app"},
+    {"id":"3", "name":"Phone Order", "descritption":"Orders placed over the phone"}]

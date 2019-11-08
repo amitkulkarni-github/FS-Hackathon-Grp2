@@ -1,0 +1,9 @@
+table.bdTable td {
+    border: 1px solid black;
+  }
+  table.bdTable th {
+    border: 1px solid black;
+  }
+  table.inputTable td {
+    padding: 3px;
+  }

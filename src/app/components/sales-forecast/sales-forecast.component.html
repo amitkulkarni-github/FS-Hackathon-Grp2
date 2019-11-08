@@ -1,12 +1,289 @@
-
-<div class="row">
-    <div class="col-md-4">
-        <app-history></app-history>
-    </div>
-    <div class="col-md-4">
-            <app-forecast></app-forecast>
-        </div>
-        <div class="col-md-4">
-                <app-summary></app-summary>
-            </div>
+<div class="alert alert-info" style="padding: 5px;">
+    <button mat-icon-button style="padding: 5px;">
+        <mat-icon (click)="sidenav.toggle()" matTooltip="Input Parameters">input</mat-icon>
+    </button>
+    <strong style="padding: 5px;">Current Selection:</strong>
+    <u>History Start</u> :
+    YEAR : {{selectedHistoryYear.year}}
+    <b>&nbsp;|&nbsp;</b>
+    WEEK : {{selectedHistoryWeek.number}} - {{selectedHistoryWeek.startDate | date:'shortDate'}}
+    <b>&nbsp;|&nbsp;</b>
+    NO. OF WEEKS : {{historyWeekCount}}
+    <b>&nbsp;**&nbsp;</b>
+    <u>Forecast Start</u> :
+    YEAR : {{selectedForecastYear.year}}
+    <b>&nbsp;|&nbsp;</b>
+    WEEK : {{selectedForecastWeek.number}} - {{selectedForecastWeek.startDate | date:'shortDate'}}
+    <b>&nbsp;|&nbsp;</b>
+    NO. OF WEEKS : {{forecastWeekCount}}
+    <b>&nbsp;**&nbsp;</b>
+    <u>CHANNEL</u> : {{selectedChannel.name}}
+    <b>&nbsp;|&nbsp;</b>
+    <u>PRODUCT</u> : {{selectedProduct.brand}} - {{selectedProduct.name}}
 </div>
+<mat-sidenav-container>
+    <mat-sidenav #sidenav mode="side" opened="true">
+        <div class="card border-primary">
+            <div class="card-header">Inputs
+                <mat-icon (click)="sidenav.toggle()" matTooltip="Hide this panel" style="float: right;">close</mat-icon>
+            </div>
+            <div class="card-body">
+                <div class="row">
+                    <div class="col">
+                        <p><b>History</b></p>
+                        <hr />
+                        <div>
+                            <table class="table table-bordered inputTable">
+                                <tr>
+                                    <td>
+                                        <label class="col-form-label">Start Year</label>
+                                    </td>
+                                    <td>
+                                        <select class="form-control" [(ngModel)]="selectedHistoryYear"
+                                            id="historyYearSelect" (change)="onYearChange($event, year)">
+                                            <option *ngFor="let year of historyYears" [ngValue]="year">
+                                                {{year.year}}
+                                            </option>
+                                        </select>
+                                    </td>
+
+                                </tr>
+                                <tr>
+                                    <td>
+                                        <label class="col-form-label">Start Week</label>
+                                    </td>
+                                    <td>
+                                        <select class="form-control" [(ngModel)]="selectedHistoryWeek"
+                                            id="historyWeekSelect">
+                                            <option *ngFor="let week of selectedHistoryYear.weeks" [ngValue]="week">
+                                                Week {{week.number}} - {{week.startDate | date:'shortDate'}}
+                                            </option>
+                                        </select>
+                                    </td>
+
+                                </tr>
+                                <tr>
+                                    <td>Cut-off Date</td>
+                                    <td>
+                                        {{historyEndDate| date:'shortDate'}}
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>
+                                        <label class="col-form-label">No. of weeks</label>
+                                    </td>
+                                    <td>
+                                        <input [(ngModel)]="historyWeekCount" type="number" class="form-control">
+                                    </td>
+                                </tr>
+                            </table>
+                        </div>
+
+                    </div>
+
+                </div>
+                <hr />
+                <div class="row">
+                    <div class="col">
+                        <p><b>Forecast</b></p>
+                        <hr />
+                        <div>
+                            <table class="table table-bordered inputTable">
+                                <tr>
+                                    <td>
+                                        <label class="col-form-label">Start Year</label>
+                                    </td>
+                                    <td>
+                                        <select [(ngModel)]="selectedForecastYear" class="form-control"
+                                            id="forecastYearSelect" (change)="onYearChange($event, year)">
+                                            <option *ngFor="let year of forecastYears" [ngValue]="year">
+                                                {{year.year}}
+                                            </option>
+                                        </select>
+                                    </td>
+
+                                </tr>
+                                <tr>
+                                    <td>
+                                        <label class="col-form-label">Start Week</label>
+                                    </td>
+                                    <td>
+                                        <select [(ngModel)]="selectedForecastWeek" class="form-control"
+                                            id="forecastWeekSelect">
+                                            <option *ngFor="let week of selectedForecastYear.weeks" [ngValue]="week">
+                                                Week {{week.number}} - {{week.startDate | date:'shortDate'}}
+                                            </option>
+                                        </select>
+                                    </td>
+
+                                </tr>
+                                <tr>
+                                    <td>
+                                        <label class="col-form-label">No. of weeks</label>
+                                    </td>
+                                    <td>
+                                        <input [(ngModel)]="forecastWeekCount" type="number" class="form-control">
+                                    </td>
+                                </tr>
+                            </table>
+                        </div>
+                    </div>
+
+                </div>
+                <hr />
+                <div class="row">
+                    <div class="col">
+                        <p><b>Channel</b></p>
+                        <div>
+                            <select [(ngModel)]="selectedChannel" class="form-control" id="channelSelect">
+                                <option *ngFor="let channel of channels" [ngValue]="channel">
+                                    {{channel.name}}
+                                </option>
+                            </select>
+                        </div>
+
+                    </div>
+
+                </div>
+                <hr />
+                <div class="row">
+                    <div class="col">
+                        <p><b>Product</b></p>
+                        <div>
+                            <select [(ngModel)]="selectedProduct" class="form-control" id="productSelect">
+                                <option *ngFor="let product of products" [ngValue]="product">
+                                    {{product.brand}} - {{product.name}}
+                                </option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+                <hr />
+                <div class="row">
+                    <div class="col">
+                        <button (click)="showHistory()" type="button"
+                            class="btn btn-primary btn-lg btn-block">History</button>
+                    </div>
+                    <div class="col">
+                        <button type="button" class="btn btn-primary btn-lg btn-block">Forecast</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </mat-sidenav>
+    <mat-sidenav-content layout-padding>
+        <div style="height: 88vh;">
+            <div class="row">
+                <div class="col-md-8">
+                    <div class="card border-primary" *ngIf="showHistorySection">
+                        <div class="card-header">History</div>
+                        <div class="card-body" style="overflow-x:auto;overflow-y:auto;width: 100%;">
+                            <div style="width: 100%;">
+                                <table style="width: 100%;" id="tblHistory" class="bdTable">
+                                    <tr *ngFor="let year of filteredHistoryYears; let i=index;">
+                                        <td>{{year.year}}</td>
+                                        <td [attr.colspan]="7" *ngFor="let week of year.weeks; let j=index;">
+
+                                            <table style="width: 100%;">
+
+                                                <tr>
+                                                    <td [attr.colspan]="7">
+                                                        Week {{week.number}}
+                                                    </td>
+                                                </tr>
+                                                <tr>
+                                                    <td [attr.colspan]="7">
+                                                        {{week.startDate}}
+                                                    </td>
+                                                </tr>
+                                                <tr>
+                                                    <td *ngFor="let day of week.days">{{day}}</td>
+                                                </tr>
+                                                <tr>
+                                                    <td [attr.colspan]="7">
+                                                        {{week.unitsSold}}
+                                                    </td>
+                                                </tr>
+                                            </table>
+
+                                        </td>
+                                    </tr>
+
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-4">
+                        <div class="card border-primary" *ngIf="showHistorySection">
+                                <div class="card-header">Summary - History</div>
+                                <div class="card-body" style="overflow-x:auto;overflow-y:auto;width: 100%;">
+                                    <table class=bdTable>
+                                        <thead>
+                                            <tr>
+                                                    <th>Year/Month</th>
+                                                    <th *ngFor="let mName of monthNames">{{mName}}</th>
+                                            </tr>
+                                        </thead>
+                                        <tr *ngFor="let year of filteredHistoryYears; let i=index;">
+                                            <td>{{year.year}}</td>
+                                            <td *ngFor="let month of year.months">{{month.unitsSold}}</td>
+                                        </tr>
+                                    </table>
+                                </div>
+                            </div>
+                </div>
+            </div>
+            <hr />
+            <div class="row">
+                <div class="col-md-8">
+                    <div class="card border-primary" *ngIf="showHistorySection">
+                        <div class="card-header">Forecast</div>
+                        <div class="card-body" style="overflow-x:auto;overflow-y:auto;width: 100%;">
+                            <div style="width: 100%;">
+                                <table style="width: 100%;" id="tblForecast" class="bdTable">
+                                    <tr *ngFor="let year of filteredHistoryYears; let i=index;">
+                                        <td>{{year.year}}</td>
+                                        <td [attr.colspan]="7" *ngFor="let week of year.weeks; let j=index;">
+
+                                            <table style="width: 100%;">
+
+                                                <tr>
+                                                    <td [attr.colspan]="7">
+                                                        Week {{week.number}}
+                                                    </td>
+                                                </tr>
+                                                <tr>
+                                                    <td [attr.colspan]="7">
+                                                        {{week.startDate}}
+                                                    </td>
+                                                </tr>
+                                                <tr>
+                                                    <td *ngFor="let day of week.days">{{day}}</td>
+                                                </tr>
+                                                <tr>
+                                                    <td [attr.colspan]="7">
+                                                        {{week.unitsSold}}
+                                                    </td>
+                                                </tr>
+                                            </table>
+
+                                        </td>
+                                    </tr>
+
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-4">
+                        <div class="card border-primary" *ngIf="showHistorySection">
+                                <div class="card-header">Summary - Forecast</div>
+                                <div class="card-body" style="overflow-x:auto;overflow-y:auto;width: 100%;">
+                                </div>
+                            </div>
+                </div>
+            </div>
+        </div>
+    </mat-sidenav-content>
+</mat-sidenav-container>

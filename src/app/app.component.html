@@ -1,6 +1,6 @@
 <div class="row">
     <div class="col-lg-12">
-      <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+      <nav class="navbar navbar-expand-lg navbar-dark bg-primary">
         <a class="navbar-brand" href="#">Sales Forecast</a>
         <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarColor02"
           aria-controls="navbarColor02" aria-expanded="false" aria-label="Toggle navigation">
@@ -21,26 +21,7 @@
       </nav>
     </div>
   </div>
-  <div class="alert alert-primary">
-        <button mat-icon-button>
-                <mat-icon (click)="sidenav.toggle()">arrow_forward_ios</mat-icon>
-            </button>
-            <span style="font-size: 12px;">
-                [&nbsp;History Start : 01-JAN-2019 | No. of Weeks : 4&nbsp;] &nbsp;&nbsp;
-                [&nbsp;Forecast Start : 01-JAN-2020 | No. of Weeks : 4&nbsp;] &nbsp;&nbsp;
-                Channel : Direct Store Order
-    
-            </span>
-      </div>
+  <div>
+      <app-sales-forecast></app-sales-forecast>
 
-<mat-sidenav-container>
-<mat-sidenav #sidenav mode="side">
-    <app-input-params></app-input-params>
-</mat-sidenav>
-<mat-sidenav-content layout-padding>
-    <div style="height: 88vh;">
-        <app-sales-forecast></app-sales-forecast>
-
-    </div>
-</mat-sidenav-content>
-</mat-sidenav-container>
+  </div>

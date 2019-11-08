@@ -1,0 +1,39 @@
+<div class="card border-primary" *ngIf="showHistorySection">
+    <div class="card-header">History</div>
+    <div class="card-body" style="overflow-x:auto;">
+        <div style="width: 100%;">
+            <table style="width: 100%;" id="tblHistory" class="bdTable">
+                <thead>
+                    <tr>
+                        <th *ngFor="let week of historyWeeks; let i=index;">
+                            <div style="width: 100%;">
+                                <table style="width: 100%;">
+                                    <tr>
+                                        <td [attr.colspan]="week.numberOfDays">
+                                            Week {{week.number}}
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td [attr.colspan]="week.numberOfDays">
+                                            {{week.startDate}}
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td *ngFor="let day of week.days">{{day}}</td>
+                                    </tr>
+                                </table>
+                            </div>
+                        </th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td *ngFor="let week of historyWeeks; let i=index;">
+                            {{week.unitsSold}}
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
