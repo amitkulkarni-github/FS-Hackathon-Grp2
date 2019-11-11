@@ -39,7 +39,9 @@
               "node_modules/jquery-ui-dist/jquery-ui.min.js",
     "node_modules/slickgrid/lib/jquery.event.drag-2.3.0.js",
     "node_modules/angular-slickgrid/lib/multiple-select/multiple-select.js",
-    "node_modules/moment/min/moment.min.js"
+    "node_modules/moment/min/moment.min.js",
+    "node_modules/canvasjs/dist/canvasjs.js",
+    "node_modules/canvasjs/dist/jquery.canvasjs.min.js"
 
             ]
           },

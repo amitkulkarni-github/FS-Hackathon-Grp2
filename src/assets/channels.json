@@ -1,3 +1,17 @@
-[{"id":"1", "name":"Direct Store Order", "descritption":"Orders placed in-store"},
-    {"id":"2", "name":"Direct Online Sales", "descritption":"Orders placed on the website or app"},
-    {"id":"3", "name":"Phone Order", "descritption":"Orders placed over the phone"}]
+[
+    {
+        "channelId": "5dc75a61c0bd39e99bf3d68c",
+        "channel": "Online",
+        "description": "Direct Online Sales"
+    },
+    {
+        "channelId": "5dc75a61c0bd39e99bf3d68d",
+        "channel": "Phone",
+        "description": "Phone Order"
+    },
+    {
+        "channelId": "5dc75a61c0bd39e99bf3d68b",
+        "channel": "Store",
+        "description": "Direct Store Order"
+    }
+]
