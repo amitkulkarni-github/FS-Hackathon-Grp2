@@ -1,5 +1,6 @@
 import { Component, OnInit, ViewContainerRef, ComponentFactoryResolver, ViewChild } from '@angular/core';
 import { Router, ActivatedRoute, ParamMap } from '@angular/router'
+import {HttpHeaders} from '@angular/common/http'
 import * as models from 'src/app/models/Models'
 import { ForecastService } from 'src/app/services/forecast/forecast.service'
 import { StaticDetailsService } from 'src/app/services/static-details/static-details.service'
@@ -89,7 +90,6 @@ export class SalesForecastComponent implements OnInit {
 
   onChange(event){
     this.products = [];
-    debugger;
     let _channelProducts = this.staticDetails.channelProducts.filter(a=>{
       if(a.channelId == event.channelId)
       return a;
@@ -155,31 +155,16 @@ export class SalesForecastComponent implements OnInit {
     let _inputParams = new models.InputParams();
     _inputParams.channelId = this.selectedChannel.channelId;
     _inputParams.productId = this.selectedProduct.id;
-    _inputParams.historyStartDate = new Date(moment(this.selectedHistoryWeek.startDate).format());
-    _inputParams.historyEndDate = new Date(moment(this.selectedHistoryWeek.startDate).add(this.historyWeekCount, 'w').format());
-    _inputParams.forecastStartDate = new Date(moment(this.selectedForecastWeek.startDate).format());
-    _inputParams.forecastEndDate = new Date(moment(this.selectedForecastWeek.startDate).add(this.forecastWeekCount, 'w').format());
+    _inputParams.historyStartDate = new Date(moment(this.selectedHistoryWeek.startDate).format(moment.HTML5_FMT.DATE));
+    _inputParams.historyEndDate = new Date(moment(this.selectedHistoryWeek.startDate).add(this.historyWeekCount, 'w').format(moment.HTML5_FMT.DATE));
+    _inputParams.forecastStartDate = new Date(moment(this.selectedForecastWeek.startDate).format(moment.HTML5_FMT.DATE));
+    _inputParams.forecastEndDate = new Date(moment(this.selectedForecastWeek.startDate).add(this.forecastWeekCount, 'w').format(moment.HTML5_FMT.DATE));
 
-    await this.forecastService.GetHistory().then(result => {
-      let _history = result;
-      this.salesDataCollection.history = _history.filter(a => {
-        if(moment(a.dateOfSale).isBetween(moment(_inputParams.historyStartDate).format(), moment(_inputParams.historyEndDate).format())
-         && a.channelId == _inputParams.channelId
-         && a.productId == _inputParams.productId){
-           return a;
-         }
-      });
-    });
-
-    await this.forecastService.GetForecast().then(result => {
-      let _forecast = result;
-      this.salesDataCollection.forecast = _forecast.filter(a => {
-        if(moment(a.dateOfSale).isBetween(_inputParams.forecastStartDate, _inputParams.forecastEndDate)
-         && a.channelId == _inputParams.channelId
-         && a.productId == _inputParams.productId){
-           return a;
-         }
-      });
+    
+    var requestData=[];
+    
+    await this.forecastService.GetHistory(_inputParams).then(result => {
+      this.salesDataCollection = result;
     });
 
     this.processData('H');
@@ -206,15 +191,15 @@ export class SalesForecastComponent implements OnInit {
     let _displayWeeks = [];
 
     if(mode == 'H'){
-      _salesDataArray = this.salesDataCollection.history;
+      //_salesDataArray = this.salesDataCollection.historyDetails;
     }
     else{
-      _salesDataArray = this.salesDataCollection.forecast;
+      //_salesDataArray = this.salesDataCollection.forecastMap;
     }
 
     //divide sales history into weeks and show summed up units sold in each week
     for (let i = 0; i < _salesDataArray.length; i++) {
-      oldYearNum = moment(_salesDataArray[i].dateOfSale).year();
+      oldYearNum = moment(_salesDataArray[i].date).year();
       if (oldYearNum != newYearNum) {
         newYearNum = oldYearNum;
         newYear = new models.Year();
@@ -223,30 +208,30 @@ export class SalesForecastComponent implements OnInit {
       }
 
       //prepare monthly summary for history data
-      oldMonthNum = moment(_salesDataArray[i].dateOfSale).month();
-      newYear.months[oldMonthNum].unitsSold += _salesDataArray[i].unitsSold;
+      oldMonthNum = moment(_salesDataArray[i].date).month();
+      newYear.months[oldMonthNum].units += _salesDataArray[i].units;
 
 
-      oldWeekNum = moment(_salesDataArray[i].dateOfSale).isoWeek()
+      oldWeekNum = moment(_salesDataArray[i].date).isoWeek()
 
       if (oldWeekNum != newWeekNum) {
         newWeekNum = oldWeekNum
         newWeek = new models.Week()
-        newWeek.startDate = _salesDataArray[i].dateOfSale
-        newWeek.number = moment(_salesDataArray[i].dateOfSale).isoWeek()
-        newWeek.unitsSold = _salesDataArray[i].unitsSold
-        newWeek.days.push(moment(_salesDataArray[i].dateOfSale).format('dddd').substring(0, 1))
-        newWeek.dates.push(moment(_salesDataArray[i].dateOfSale).format('D'))
+        newWeek.startDate = _salesDataArray[i].date
+        newWeek.number = moment(_salesDataArray[i].date).isoWeek()
+        newWeek.units = _salesDataArray[i].units
+        newWeek.days.push(moment(_salesDataArray[i].date).format('dddd').substring(0, 1))
+        newWeek.dates.push(moment(_salesDataArray[i].date).format('D'))
         newWeek.numberOfDays += 1
         newWeek.serialNumber = ++_weekSrNumber;
         newYear.numberOfWeeks += 1
         newYear.weeks.push(newWeek)
       }
       else {
-        newWeek.unitsSold += _salesDataArray[i].unitsSold
+        newWeek.units += _salesDataArray[i].units
         newWeek.numberOfDays += 1
-        newWeek.dates.push(moment(_salesDataArray[i].dateOfSale).format('D'))
-        newWeek.days.push(moment(_salesDataArray[i].dateOfSale).format('dddd').substring(0, 1))
+        newWeek.dates.push(moment(_salesDataArray[i].date).format('D'))
+        newWeek.days.push(moment(_salesDataArray[i].date).format('dddd').substring(0, 1))
       }
 
     }
@@ -275,18 +260,18 @@ export class SalesForecastComponent implements OnInit {
   }
 
   processMonthlyForecastSummary() {
-    debugger;
-    let _groupedMonths = _.groupBy(this.salesDataCollection.forecast, 
-      (result) => moment(result['dateOfSale']).startOf('month'))
+    
+    let _groupedMonths = _.groupBy(this.salesDataCollection, 
+      (result) => moment(result['date']).startOf('month'))
       ;
     let _months =  _.toArray(_groupedMonths);
     
     for(let i=0;i<_months.length;i++){
       let newMonth = new models.Month();
       for(let j=0; j< _months[i].length;j++){
-        newMonth.unitsSold += _months[i][j]['unitsSold'];
-        newMonth.name = moment(_months[i][j]['dateOfSale']).format('MMM');
-        newMonth.year = moment(_months[i][j]['dateOfSale']).year();
+        newMonth.units += _months[i][j]['units'];
+        newMonth.name = moment(_months[i][j]['date']).format('MMM');
+        newMonth.year = moment(_months[i][j]['date']).year();
       }
       this.summaryForecastMonths.push(newMonth);
     }

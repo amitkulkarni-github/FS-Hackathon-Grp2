@@ -64,26 +64,47 @@ export class InputParams {
 
 export class SalesDataCollection{
     history:SalesData[];
-    forecast:SalesData[];
+    forecast:ForecastMap[];
     constructor(){
         this.history = [];
         this.forecast = [];
     }
 }
 
+export class ForecastMap{
+    methodId:string;
+    data:SalesData[];
+    constructor(){
+        this.data = [];
+    }
+
+}
+
+export class ForecastMethodWeekMap{
+    methodId:string;
+    weeks:Week[];
+    constructor(){
+        this.weeks = [];
+    }
+}
+
+export class MethodWeekMap{
+    
+}
+
 export class SalesData {
     id: string
     productId: string
     channelId: string
-    dateOfSale: string
-    unitsSold: number
+    date: string
+    units: number
 }
 
 export class Week {
     number: number
     startDate: string
     days: string[]
-    unitsSold: number
+    units: number
     numberOfDays: number
     serialNumber: number
     dates: string[]
@@ -107,7 +128,7 @@ export class Year {
             var _month = new Month();
             _month.number = i;
             _month.name = moment().month(i).format('MMMM');
-            _month.unitsSold = 0;
+            _month.units = 0;
             this.months.push(_month);
         }
         this.numberOfWeeks = 0;
@@ -116,11 +137,11 @@ export class Year {
 
 export class Month {
     number: number
-    unitsSold: number
+    units: number
     name: string
     year:number
     constructor(){
-        this.unitsSold = 0;
+        this.units = 0;
     }
 }
 
